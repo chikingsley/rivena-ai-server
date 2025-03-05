@@ -156,6 +156,6 @@ docs
 **/*.zip
 **/*.tar.gz
 **/*.bun
-# build
+build
 package-lock.jsonagents-playground/node_modules/
 agents-playground/node_modules/
