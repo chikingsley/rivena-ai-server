@@ -15,7 +15,7 @@ export class VoiceAgentManager {
   
   constructor() {
     // Initialize room service using the same config as LiveKitManagement
-    const livekitHost = process.env.LIVEKIT_HOST!;
+    const livekitHost = process.env.LIVEKIT_URL!;
     this.roomService = new RoomServiceClient(
       livekitHost, 
       process.env.LIVEKIT_API_KEY!, 

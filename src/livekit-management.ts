@@ -4,7 +4,7 @@ export class LiveKitManagement {
   private roomService: RoomServiceClient;
   
   constructor() {
-    const livekitHost = process.env.LIVEKIT_HOST!;
+    const livekitHost = process.env.LIVEKIT_URL!;
     this.roomService = new RoomServiceClient(
       livekitHost, 
       process.env.LIVEKIT_API_KEY!, 
