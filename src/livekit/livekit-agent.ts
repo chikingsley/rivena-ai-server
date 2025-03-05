@@ -73,7 +73,7 @@ export class VoiceAgentManager {
    * Get detailed information about all registered agents
    */
   getAgentDetails() {
-    const details: Record<string, any> = {};
+    const details: Record<string, unknown> = {};
     this.agentRegistry.forEach((value, key) => {
       details[key] = {
         systemPrompt: value.systemPrompt,

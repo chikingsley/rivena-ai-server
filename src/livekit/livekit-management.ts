@@ -110,7 +110,7 @@ export class LiveKitManagement {
   async updateParticipantMetadata(
     roomName: string,
     identity: string,
-    metadata: Record<string, any>,
+    metadata: Record<string, unknown>,
   ) {
     console.log(`[LiveKitManagement] Updating metadata for ${identity} in room: ${roomName}`);
     try {
