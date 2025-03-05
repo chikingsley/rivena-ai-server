@@ -1,9 +1,5 @@
-import {
-  AccessToken,
-  AccessTokenOptions,
-  VideoGrant,
-} from "livekit-server-sdk";
-import { NextResponse } from "next/server";
+import { AccessToken, AccessTokenOptions, VideoGrant } from 'livekit-server-sdk';
+import { NextResponse } from 'next/server';
 
 // NOTE: you are expected to define the following environment variables in `.env.local`:
 const API_KEY = process.env.LIVEKIT_API_KEY;
@@ -23,13 +19,13 @@ export type ConnectionDetails = {
 export async function GET() {
   try {
     if (LIVEKIT_URL === undefined) {
-      throw new Error("LIVEKIT_URL is not defined");
+      throw new Error('LIVEKIT_URL is not defined');
     }
     if (API_KEY === undefined) {
-      throw new Error("LIVEKIT_API_KEY is not defined");
+      throw new Error('LIVEKIT_API_KEY is not defined');
     }
     if (API_SECRET === undefined) {
-      throw new Error("LIVEKIT_API_SECRET is not defined");
+      throw new Error('LIVEKIT_API_SECRET is not defined');
     }
 
     // Generate participant token
@@ -48,7 +44,7 @@ export async function GET() {
       participantName: participantIdentity,
     };
     const headers = new Headers({
-      "Cache-Control": "no-store",
+      'Cache-Control': 'no-store',
     });
     return NextResponse.json(data, { headers });
   } catch (error) {
@@ -59,13 +55,10 @@ export async function GET() {
   }
 }
 
-function createParticipantToken(
-  userInfo: AccessTokenOptions,
-  roomName: string
-) {
+function createParticipantToken(userInfo: AccessTokenOptions, roomName: string) {
   const at = new AccessToken(API_KEY, API_SECRET, {
     ...userInfo,
-    ttl: "15m",
+    ttl: '15m',
   });
   const grant: VideoGrant = {
     room: roomName,
