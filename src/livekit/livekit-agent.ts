@@ -11,8 +11,8 @@ export class VoiceAgentManager {
     const livekitHost = process.env.LIVEKIT_URL!;
     this.roomService = new RoomServiceClient(
       livekitHost,
-      process.env.LIVEKIT_API_KEY!,
-      process.env.LIVEKIT_API_SECRET!,
+      process.env.VITE_LIVEKIT_API_KEY!,
+      process.env.VITE_LIVEKIT_API_SECRET!,
     );
     console.log(`[VoiceAgentManager] Initialized with host: ${livekitHost}`);
   }

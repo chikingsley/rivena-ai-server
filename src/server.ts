@@ -4,10 +4,16 @@ import { voiceAgentManager } from './livekit/livekit-agent';
 import { livekitManagement } from './livekit/livekit-management';
 import { createToken } from './livekit/livekit-token';
 import { createWebhookHandler } from './livekit/livekit-webhooks';
+import { cors } from '@elysiajs/cors';
 
 // Create the main app
 const app = new Elysia()
   .use(swagger())
+  .use(cors({
+    origin: ['http://localhost:5173'],  // Allow connections from the Vite dev server
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }))
   .get('/', ({ path }) => path)
   .post('/hello', 'Do you miss me');
 
@@ -24,6 +30,30 @@ app.group('/livekit', (app) =>
       console.log(`[Route] GET /livekit/token/${room}/${identity} - Custom token request`);
       set.headers['Content-Type'] = 'text/plain';
       return await createToken(identity, room);
+    })
+    // Add connection details endpoint
+    .get('/connection-details', async ({ set }) => {
+      console.log('[Route] GET /livekit/connection-details - Connection details request');
+      set.headers['Content-Type'] = 'application/json';
+      
+      try {
+        // Generate participant token
+        const participantIdentity = `user_${Math.floor(Math.random() * 10_000)}`;
+        const roomName = `room_${Math.floor(Math.random() * 10_000)}`;
+        const participantToken = await createToken(participantIdentity, roomName);
+
+        // Return connection details
+        return {
+          serverUrl: process.env.LIVEKIT_URL,
+          roomName,
+          participantToken,
+          participantName: participantIdentity,
+        };
+      } catch (error) {
+        console.error('[Route] Error creating connection details:', error);
+        set.status = 500;
+        return { error: 'Failed to create connection details' };
+      }
     }),
 );
 

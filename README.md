@@ -33,8 +33,8 @@ cd rivena-ai-server
 2. Create a `.env` file in the root directory:
 
 ```env
-LIVEKIT_API_KEY=your_api_key
-LIVEKIT_API_SECRET=your_api_secret
+VITE_LIVEKIT_API_KEY=your_api_key
+VITE_LIVEKIT_API_SECRET=your_api_secret
 LIVEKIT_URL=your_livekit_url
 ```
 

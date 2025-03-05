@@ -2,8 +2,8 @@ import { Elysia } from 'elysia';
 import { WebhookEvent, WebhookReceiver } from 'livekit-server-sdk';
 
 export const createWebhookHandler = (app: Elysia) => {
-  const webhookApiKey = process.env.LIVEKIT_API_KEY!;
-  const webhookApiSecret = process.env.LIVEKIT_API_SECRET!;
+  const webhookApiKey = process.env.VITE_LIVEKIT_API_KEY!;
+  const webhookApiSecret = process.env.VITE_LIVEKIT_API_SECRET!;
   const receiver = new WebhookReceiver(webhookApiKey, webhookApiSecret);
 
   console.log('[LiveKitWebhooks] Initialized webhook receiver');

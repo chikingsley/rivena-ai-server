@@ -15,7 +15,7 @@ export const createToken = async (
   );
 
   try {
-    const at = new AccessToken(process.env.LIVEKIT_API_KEY!, process.env.LIVEKIT_API_SECRET!, {
+    const at = new AccessToken(process.env.VITE_LIVEKIT_API_KEY!, process.env.VITE_LIVEKIT_API_SECRET!, {
       identity: participantName,
       ttl,
     });

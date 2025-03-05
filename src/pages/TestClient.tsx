@@ -1,6 +1,6 @@
-"use client";
+// TestClient.tsx
 
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   LiveKitRoom,
   useVoiceAssistant,
@@ -9,38 +9,50 @@ import {
   VoiceAssistantControlBar,
   AgentState,
   DisconnectButton,
-} from "@livekit/components-react";
-import { useCallback, useEffect, useState } from "react";
-import { MediaDeviceFailure } from "livekit-client";
-import type { ConnectionDetails } from "./api/connection-details/route";
-import { NoAgentNotification } from "@/components/NoAgentNotification";
-import { CloseIcon } from "@/components/CloseIcon";
-import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
+} from '@livekit/components-react';
+import { useCallback, useEffect, useState } from 'react';
+import { MediaDeviceFailure } from 'livekit-client';
+import { NoAgentNotification } from '../components/NoAgentNotification';
+import { CloseIcon } from '../components/CloseIcon';
+import { useKrispNoiseFilter } from '@livekit/components-react/krisp';
+
+export type ConnectionDetails = {
+  serverUrl: string;
+  roomName: string;
+  participantName: string;
+  participantToken: string;
+};
 
 export default function Page() {
   const [connectionDetails, updateConnectionDetails] = useState<
     ConnectionDetails | undefined
   >(undefined);
-  const [agentState, setAgentState] = useState<AgentState>("disconnected");
+  const [agentState, setAgentState] = useState<AgentState>('disconnected');
 
   const onConnectButtonClicked = useCallback(async () => {
-    // Generate room connection details, including:
-    //   - A random Room name
-    //   - A random Participant name
-    //   - An Access Token to permit the participant to join the room
-    //   - The URL of the LiveKit server to connect to
-    //
-    // In real-world application, you would likely allow the user to specify their
-    // own participant name, and possibly to choose from existing rooms to join.
-
-    const url = new URL(
-      process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT ??
-      "/api/connection-details",
-      window.location.origin
-    );
-    const response = await fetch(url.toString());
-    const connectionDetailsData = await response.json();
-    updateConnectionDetails(connectionDetailsData);
+    try {
+      // Generate random room and participant names
+      const participantIdentity = `user_${Math.floor(Math.random() * 10_000)}`;
+      const roomName = `room_${Math.floor(Math.random() * 10_000)}`;
+      
+      // Get a token from our Elysia server using regular fetch API
+      const token = await fetch(`http://localhost:3000/livekit/token/${roomName}/${participantIdentity}`).then(r => r.text());
+      
+      if (token) {
+        // Create connection details
+        updateConnectionDetails({
+          serverUrl: import.meta.env.VITE_LIVEKIT_URL as string,
+          roomName,
+          participantName: participantIdentity,
+          participantToken: token,
+        });
+      } else {
+        console.error('Failed to get token');
+      }
+    } catch (error) {
+      console.error('Error connecting to LiveKit:', error);
+      alert('Failed to connect to LiveKit server. Please check your console for details.');
+    }
   }, []);
 
   return (
@@ -108,11 +120,11 @@ function ControlBar(props: {
   return (
     <div className="relative h-[100px]">
       <AnimatePresence>
-        {props.agentState === "disconnected" && (
+        {props.agentState === 'disconnected' && (
           <motion.button
             initial={{ opacity: 0, top: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, top: "-10px" }}
+            exit={{ opacity: 0, top: '-10px' }}
             transition={{ duration: 1, ease: [0.09, 1.04, 0.245, 1.055] }}
             className="uppercase absolute left-1/2 -translate-x-1/2 px-4 py-2 bg-white text-black rounded-md"
             onClick={() => props.onConnectButtonClicked()}
@@ -122,21 +134,21 @@ function ControlBar(props: {
         )}
       </AnimatePresence>
       <AnimatePresence>
-        {props.agentState !== "disconnected" &&
-          props.agentState !== "connecting" && (
-            <motion.div
-              initial={{ opacity: 0, top: "10px" }}
-              animate={{ opacity: 1, top: 0 }}
-              exit={{ opacity: 0, top: "-10px" }}
-              transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
-              className="flex h-8 absolute left-1/2 -translate-x-1/2  justify-center"
-            >
-              <VoiceAssistantControlBar controls={{ leave: false }} />
-              <DisconnectButton>
-                <CloseIcon />
-              </DisconnectButton>
-            </motion.div>
-          )}
+        {props.agentState !== 'disconnected' &&
+          props.agentState !== 'connecting' && (
+          <motion.div
+            initial={{ opacity: 0, top: '10px' }}
+            animate={{ opacity: 1, top: 0 }}
+            exit={{ opacity: 0, top: '-10px' }}
+            transition={{ duration: 0.4, ease: [0.09, 1.04, 0.245, 1.055] }}
+            className="flex h-8 absolute left-1/2 -translate-x-1/2  justify-center"
+          >
+            <VoiceAssistantControlBar controls={{ leave: false }} />
+            <DisconnectButton>
+              <CloseIcon />
+            </DisconnectButton>
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );
@@ -145,6 +157,6 @@ function ControlBar(props: {
 function onDeviceFailure(error?: MediaDeviceFailure) {
   console.error(error);
   alert(
-    "Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab"
+    'Error acquiring camera or microphone permissions. Please make sure you grant the necessary permissions in your browser and reload the tab'
   );
 }
