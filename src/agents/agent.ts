@@ -20,7 +20,7 @@ import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const envPath = path.join(__dirname, '../.env.local');
+const envPath = path.join(__dirname, '../../.env.local');
 dotenv.config({ path: envPath });
 
 export default defineAgent({
