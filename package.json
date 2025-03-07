@@ -22,10 +22,11 @@
     "fix": "bun run format && bun run lint:fix"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.2.1",
+    "@deepgram/sdk": "^3.11.2",
     "@elysiajs/cors": "^1.2.0",
     "@elysiajs/swagger": "^1.2.2",
     "@eslint/eslintrc": "^3.3.0",
-    "@livekit/agents": "^0.7.0",
     "@livekit/agents-plugin-deepgram": "^0.5.4",
     "@livekit/agents-plugin-elevenlabs": "^0.6.1",
     "@livekit/agents-plugin-livekit": "^0.1.0",
@@ -39,6 +40,7 @@
     "@tailwindcss/vite": "^4.0.9",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@typescript-eslint/eslint-plugin": "^8.26.0",
+    "ai": "^4.1.53",
     "bun-types": "^1.2.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -58,6 +60,7 @@
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.0.9",
     "tailwindcss-animate": "^1.0.7",
+    "vercel-ai": "^0.0.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {

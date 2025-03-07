@@ -1,121 +1,81 @@
-# Rivena AI Voice Assistant
+# LiveKit Voice Agent with Deepgram
 
-A voice assistant application built with Elysia (server) and React + Vite (client). This project enables real-time voice interactions using LiveKit for audio streaming and WebRTC capabilities.
+This project implements a voice agent using LiveKit for real-time audio streaming and Deepgram for speech-to-text transcription. The agent listens to audio from participants in a LiveKit room, transcribes it using Deepgram, and generates responses using OpenAI.
 
-## Project Structure
+## Features
 
-```
-src/
-  server/     # Elysia server code
-  client/     # React client code
-    api/      # Eden client + API types
-    components/
-    pages/
-    styles/
-  shared/     # Shared types/utilities
-```
+- Real-time audio transcription using Deepgram
+- Natural language responses using OpenAI
+- Integration with LiveKit for real-time audio streaming
+- Automatic participant detection and session management
 
 ## Prerequisites
 
-- Node.js 18+ or 20+
-- LiveKit server credentials (API Key and Secret)
-- A modern web browser with WebRTC support
+- Node.js 18+ or Bun
+- LiveKit account and server
+- Deepgram API key
+- OpenAI API key
 
-## Environment Setup
+## Setup
 
-1. Clone the repository:
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   bun install
+   ```
+3. Create a `.env.local` file in the project root with the following variables:
+   ```
+   DEEPGRAM_API_KEY=your_deepgram_api_key
+   OPENAI_API_KEY=your_openai_api_key
+   LIVEKIT_URL=your_livekit_server_url
+   LIVEKIT_TOKEN=your_livekit_token
+   ```
 
+## Running the Agent
+
+Build the project:
 ```bash
-git clone https://github.com/yourusername/rivena-ai-server.git
-cd rivena-ai-server
+bun run build
 ```
 
-2. Create a `.env` file in the root directory:
-
-```env
-VITE_LIVEKIT_API_KEY=your_api_key
-VITE_LIVEKIT_API_SECRET=your_api_secret
-LIVEKIT_URL=your_livekit_url
-```
-
-3. Install dependencies:
-
+Start the agent:
 ```bash
-npm install
+bun run start
 ```
+
+The agent will connect to the specified LiveKit room and start listening for participants. When a participant joins, the agent will automatically start a session with them.
 
 ## Development
 
-Start the development server:
-
+Start the development server with hot reloading:
 ```bash
-# Start the Elysia server
-npm run dev:server
-
-# In a separate terminal, start the React client
-npm run dev:client
+bun run dev
 ```
 
-The server will run on `http://localhost:3000` and the client on `http://localhost:5173`.
+## How It Works
 
-## Testing Endpoints
+1. The agent connects to a LiveKit room using the provided URL and token
+2. When a participant joins, the agent subscribes to their audio track
+3. The audio is streamed to Deepgram for real-time transcription
+4. When speech is detected and transcribed, the agent sends the text to OpenAI
+5. The response from OpenAI is sent back to the participant as a data message
 
-### Voice Assistant Endpoints
+## Customization
 
-1. Room Creation:
+You can customize the agent's behavior by modifying the following:
 
-```bash
-curl -X POST http://localhost:3000/api/rooms \
-  -H "Content-Type: application/json" \
-  -d '{"name": "test-room"}'
-```
+- System prompt in `src/agents/agent.ts` to change the agent's personality
+- OpenAI model and parameters in the `generateResponse` method
+- Deepgram transcription options in the `startDeepgramTranscription` method
 
-2. Participant Management:
+## Troubleshooting
 
-```bash
-curl -X PATCH http://localhost:3000/api/participants/permissions \
-  -H "Content-Type: application/json" \
-  -d '{"roomName": "test-room", "identity": "user1", "canPublish": true}'
-```
+If you encounter issues:
 
-3. Agent Attachment:
-
-```bash
-curl -X POST http://localhost:3000/api/attach \
-  -H "Content-Type: application/json" \
-  -d '{"roomName": "test-room", "systemPrompt": "You are a helpful assistant"}'
-```
-
-## Production Build
-
-Build both server and client for production:
-
-```bash
-# Build the client
-npm run build:client
-
-# Build the server
-npm run build:server
-
-# Start production server
-npm run start
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Check that your API keys are correct
+2. Ensure your LiveKit token has the necessary permissions
+3. Check the console logs for detailed error messages
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- [LiveKit](https://livekit.io/) for WebRTC infrastructure
-- [Elysia](https://elysiajs.com/) for the backend server
-- [Vite](https://vitejs.dev/) for the frontend build tool
-- [React](https://reactjs.org/) for the UI framework
+Apache-2.0
