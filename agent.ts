@@ -9,18 +9,18 @@ import {
   defineAgent,
   llm,
   pipeline,
-} from '@livekit/agents';
-import * as deepgram from '@livekit/agents-plugin-deepgram';
-import * as elevenlabs from '@livekit/agents-plugin-elevenlabs';
-import * as openai from '@livekit/agents-plugin-openai';
-import * as silero from '@livekit/agents-plugin-silero';
-import dotenv from 'dotenv';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { z } from 'zod';
+} from "@livekit/agents";
+import * as deepgram from "@livekit/agents-plugin-deepgram";
+import * as elevenlabs from "@livekit/agents-plugin-elevenlabs";
+import * as openai from "@livekit/agents-plugin-openai";
+import * as silero from "@livekit/agents-plugin-silero";
+import dotenv from "dotenv";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { z } from "zod";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const envPath = path.join(__dirname, '../.env.local');
+const envPath = path.join(__dirname, "../.env.local");
 dotenv.config({ path: envPath });
 
 export default defineAgent({
@@ -32,21 +32,21 @@ export default defineAgent({
     const initialContext = new llm.ChatContext().append({
       role: llm.ChatRole.SYSTEM,
       text:
-        'You are a voice assistant created by LiveKit. Your interface with users will be voice. ' +
-        'You should use short and concise responses, and avoiding usage of unpronounceable ' +
-        'punctuation.',
+        "You are a voice assistant created by LiveKit. Your interface with users will be voice. " +
+        "You should use short and concise responses, and avoiding usage of unpronounceable " +
+        "punctuation.",
     });
 
     await ctx.connect();
-    console.log('waiting for participant');
+    console.log("waiting for participant");
     const participant = await ctx.waitForParticipant();
     console.log(`starting assistant example agent for ${participant.identity}`);
 
     const fncCtx: llm.FunctionContext = {
       weather: {
-        description: 'Get the weather in a location',
+        description: "Get the weather in a location",
         parameters: z.object({
-          location: z.string().describe('The location to get the weather for'),
+          location: z.string().describe("The location to get the weather for"),
         }),
         execute: async ({ location }) => {
           console.debug(`executing weather function for ${location}`);
@@ -69,7 +69,7 @@ export default defineAgent({
     );
     agent.start(ctx.room, participant);
 
-    await agent.say('Hey, how can I help you today', true);
+    await agent.say("Hey, how can I help you today", true);
   },
 });
 
